@@ -141,7 +141,7 @@ impl<Src: Source, Snk: BatchSink> BatchDataPipeline<Src, Snk> {
             let mut events = Vec::with_capacity(batch.len());
             for event in batch {
                 if let Err(CdcStreamError::CdcEventConversion(
-                    CdcEventConversionError::MissingSchema(_),
+                    CdcEventConversionError::MissingSchema(_) | CdcEventConversionError::MessageNotSupported,
                 )) = event
                 {
                     continue;

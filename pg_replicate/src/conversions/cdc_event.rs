@@ -3,7 +3,7 @@ use std::{collections::HashMap, str::Utf8Error};
 
 use postgres_replication::protocol::{
     BeginBody, CommitBody, DeleteBody, InsertBody, LogicalReplicationMessage, RelationBody,
-    ReplicationMessage, TupleData, TypeBody, UpdateBody,
+    ReplicationMessage, TupleData, TypeBody, UpdateBody, TruncateBody,
 };
 use thiserror::Error;
 
@@ -161,8 +161,8 @@ impl CdcEventConverter {
                         delete_body,
                     )?)
                 }
-                LogicalReplicationMessage::Truncate(_) => {
-                    Err(CdcEventConversionError::MessageNotSupported)
+                LogicalReplicationMessage::Truncate(truncate_body) => {
+                    Ok(CdcEvent::Truncate(truncate_body.rel_ids().to_vec()))
                 }
                 _ => Err(CdcEventConversionError::UnknownReplicationMessage),
             },
@@ -184,6 +184,7 @@ pub enum CdcEvent {
     Relation(RelationBody),
     Type(TypeBody),
     KeepAliveRequested { reply: bool },
+    Truncate(Vec<TableId>),
 }
 
 impl BatchBoundary for CdcEvent {
