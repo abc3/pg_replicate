@@ -92,9 +92,10 @@ For more examples, please refer to the [examples](https://github.com/imor/pg_rep
 
 The `pg_replicate` crate has the following features:
 
-* duckdb
-* bigquery
-* stdout
+- duckdb
+- bigquery
+- stdout
+- redis
 
 Each feature enables the corresponding sink of the same name.
 

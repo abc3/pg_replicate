@@ -15,6 +15,8 @@ use super::PipelineResumptionState;
 pub mod bigquery;
 #[cfg(feature = "duckdb")]
 pub mod duckdb;
+#[cfg(feature = "redis")]
+pub mod redis;
 #[cfg(feature = "stdout")]
 pub mod stdout;
 
